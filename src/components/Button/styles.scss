@@ -1,0 +1,16 @@
+
+.root {
+  height: 40px;
+  width: 200px;
+  background-color: #0c5c62;
+  color: #fff3fb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+
+  &:hover{
+    color: #0c5c62;
+    background-color: #fff3fb;
+  }
+}

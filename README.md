@@ -1,3 +1,7 @@
+
+
+
+[Color map](https://color.romanuke.com/tsvetovaya-palitra-4061/)
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
