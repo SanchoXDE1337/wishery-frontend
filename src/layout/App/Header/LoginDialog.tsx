@@ -10,30 +10,35 @@ interface IProps {
 
 interface IState {
     visible: boolean
-    email: string
-    pass: string
+    name: string
+    password: string
 }
 
 
 export default class LoginDialog extends React.Component<IProps, IState> {
-    state = {visible: false, email: '', pass: ''};
+    state = {visible: false, name: '', password: ''}
 
-    handleOpenLoginDialog = () => this.setState({visible: true});
+    handleOpenLoginDialog = () => this.setState({visible: true})
 
-    handleCloseLoginDialog = () => this.setState({visible: false});
+    handleCloseLoginDialog = () => this.setState({visible: false})
 
-    handleChangePass = ({target: {value: pass}}: React.ChangeEvent<HTMLInputElement>) => this.setState({pass});
+    handleChangePass = ({target: {value: password}}: React.ChangeEvent<HTMLInputElement>) => this.setState({password})
 
-    handleChangeEmail = ({target: {value: email}}: React.ChangeEvent<HTMLInputElement>) => this.setState({email});
+    handleChangeEmail = ({target: {value: name}}: React.ChangeEvent<HTMLInputElement>) => this.setState({name})
 
     handleLogin = async () => {
-        const {email, pass: password} = this.state;
-        const res = await axios.post('http://localhost:8080/user/login', {email, password});
+        const {name, password} = this.state
+        const res = await axios.post('http://localhost:8080/user/login', {name, password})
+        // console.log(`token: ${res.data}`)
         console.log(res)
+        localStorage.setItem('token', res.data[0])
+        localStorage.setItem('id', res.data[1])
+        // this.handleCloseLoginDialog()
+        window.location.reload()
     }
 
     render() {
-        const {email, pass, visible} = this.state;
+        const {name, password, visible} = this.state
 
         return <>
             <Button onClick={this.handleOpenLoginDialog}>Login</Button>
@@ -48,12 +53,21 @@ export default class LoginDialog extends React.Component<IProps, IState> {
             >
                 <div className={styles.dialogBody}>
                     <div className={styles.row}>
-                        <p>Email</p>
-                        <input onChange={this.handleChangeEmail} className={styles.input} value={email}/>
+                        <p>Login</p>
+                        <input onChange={this.handleChangeEmail}
+                               className={styles.input}
+                               value={name}
+                               placeholder={'Username or E-mail'}
+                        />
                     </div>
                     <div className={styles.row}>
                         <p>Password</p>
-                        <input onChange={this.handleChangePass} className={styles.input} value={pass}/>
+                        <input onChange={this.handleChangePass}
+                               className={styles.input}
+                               value={password}
+                               placeholder={'Password'}
+                               type={'password'}
+                        />
                     </div>
                 </div>
             </Dialog>

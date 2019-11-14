@@ -1,13 +1,14 @@
 
 .root {
   height: 40px;
-  width: 200px;
+  width: 17vw;
   background-color: #0c5c62;
   color: #fff3fb;
   display: flex;
   align-items: center;
   justify-content: center;
   outline: none;
+  border-radius: 0.5em;
 
   &:hover{
     color: #0c5c62;

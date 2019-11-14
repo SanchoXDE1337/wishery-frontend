@@ -56,3 +56,4 @@ declare module '*.scss' {
 
 
 declare module 'rc-dialog'
+declare module 'react-router-dom'
