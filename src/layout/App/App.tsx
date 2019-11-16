@@ -1,9 +1,7 @@
 import React from 'react'
 import styles from './styles.scss'
-import {Header} from './Header'
-import VisibleTodoList from './VisibleTodoList'
-import AddTodo from './AddTodo'
-import {BrowserRouter, Switch, Route} from 'react-router-dom'
+import Header from './Header'
+import {Switch, Route} from 'react-router-dom'
 import Private from './Private/Private'
 
 
@@ -19,35 +17,24 @@ interface IState {
 }
 
 class App extends React.Component<IProps, IState> {
-    /*state = {token: ''}
-
-    async componentDidMount() {
-        const token = localStorage.getItem('token')
-        if (token) {
-            await this.setState({token: token})
-            console.log(this.state)
-        }
-    }*/
 
     render() {
         return (
-            <BrowserRouter>
-                <div className={styles.root}>
-                    <Header/>
+            <div className={styles.root}>
+                <Header/>
+                <div className={styles.body}>
                     <div className={styles.content}>
                         <Switch>
                             <Route path="/private">
                                 <Private/>
                             </Route>
                             <Route path="/">
-                                <AddTodo/>
-                                <VisibleTodoList/>
                             </Route>
                         </Switch>
                     </div>
                     <Footer/>
                 </div>
-            </BrowserRouter>
+            </div>
         )
     }
 };

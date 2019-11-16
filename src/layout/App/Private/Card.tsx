@@ -8,7 +8,7 @@ interface IProps {
 }
 const CardExampleLinkCard: React.FC<IProps> = ({title, author, description}) => (
     <Card
-        href='/'
+        // href='/'
         header={title}
         meta={author}
         description={description}

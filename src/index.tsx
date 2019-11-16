@@ -4,20 +4,29 @@ import App from './layout/App/App'
 import {Provider} from 'react-redux'
 import {createStore} from 'redux'
 import rootReducer from './store/reducers'
-// import { createBrowserHistory } from 'history';
+import {Router} from "react-router-dom";
+import historyService from './services/historyService'
+import {loadState} from "./utils/localStore";
 
-const store = createStore(rootReducer)
+const initialState = loadState();
+
+const store = createStore(
+    rootReducer,
+    initialState,
+    (window as any).__REDUX_DEVTOOLS_EXTENSION__ && (window as any).__REDUX_DEVTOOLS_EXTENSION__()
+    );
 
 
 // autorun(() => {
 //         console.dir(mobXStore);
 //         saveState(mobXStore.serialize());
 //     },
-// const history = createBrowserHistory();
 
 
 ReactDOM.render(
     <Provider store={store}>
-        <App/>
+        <Router history={historyService.history}>
+            <App/>
+        </Router>
     </Provider>
-    , document.getElementById('root'))
+    , document.getElementById('root'));

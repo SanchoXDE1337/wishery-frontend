@@ -28,7 +28,7 @@ export default class Private extends React.Component<IProps, IState> {
         const token = localStorage.getItem('token')
         const res = await axios(`http://localhost:8080/private/${id}`, {headers: {'auth-token': token}})
         if (res) {
-            await this.setState({successfully: true, data: res.data})
+            this.setState({successfully: true, data: res.data})
         }
         console.log(...res.data)
     }

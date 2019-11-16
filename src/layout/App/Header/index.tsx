@@ -5,49 +5,51 @@ import LoginDialog from './LoginDialog'
 import RegisterDialog from "./RegisterDialog";
 import LogoutButton from './LogoutButton'
 import PrivateButton from "./PrivateButton";
-import {Link} from 'react-router-dom'
+import historyServicse from "../../../services/historyService";
+import {connect} from "react-redux";
+import {Dispatch} from "redux";
+import {login} from "../../../store/actions";
+import {IStore} from "../../../store/reducers";
 
 interface IState {
-    token: string
+    token?: string
 }
 
 interface IProps {
-
+    id?: string
+    token?: string
+    login?: (token: string, id: string) => void
 }
 
-export class Header extends React.Component<IProps, IState> {
-    state = {token: ''}
 
-    async componentDidMount() {
-        const token = localStorage.getItem('token')
-        if (token) {
-            await this.setState({token: token})
-        }
-        /*window.addEventListener('storage', async () => {
-            const token = localStorage.getItem('token')
-            if (token) {
-                await this.setState({token: token})
-                console.log(this.state)
-            }
-        })*/
+class _Header extends React.Component<IProps, IState> {
+
+    constructor(props: IProps) {
+        super(props);
+        this.state = {token: props.token}
     }
 
 
+    componentWillReceiveProps(nextProps: Readonly<IProps>, nextContext: any): void {
+        const {token} = nextProps;
+        if(token !== this.props.token) this.setState({token})
+    }
+
+    handleClickToLogo = () => historyServicse.history!.push('/');
+
     render() {
+        const {login} = this.props;
         return (
             <div className={styles.root}>
-                <Link to={'/'}>
-                    <div className={styles.title}>WISHERY</div>
-                </Link>
+                <div onClick={this.handleClickToLogo} className={styles.title}>WISHERY</div>
                 <div className={styles.buttonSet}>
-                    {this.state.token ?
-                        <>
+                    {this.state.token
+                        ? <>
                             <PrivateButton/>
                             <LogoutButton/>
                         </>
-                        :
-                        <>
-                            <LoginDialog/>
+                        : <>
+                            {login && <LoginDialog login={login}/>}
                             <RegisterDialog/>
                         </>
                     }
@@ -57,4 +59,12 @@ export class Header extends React.Component<IProps, IState> {
     }
 }
 
+const mapStateToProps = ({accountStore: {id, token}}: IStore) => ({id, token})
 
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+    login: (token: string, id: string) => dispatch(login(token, id)),
+})
+
+const Header = connect(mapStateToProps, mapDispatchToProps)(_Header)
+
+export default Header

@@ -5,7 +5,7 @@ import Button from "../../../components/Button";
 import axios from "axios";
 
 interface IProps {
-
+    login: (token: string, id: string) => void
 }
 
 interface IState {
@@ -16,7 +16,8 @@ interface IState {
 
 
 export default class LoginDialog extends React.Component<IProps, IState> {
-    state = {visible: false, name: '', password: ''}
+    state = {visible: true, name: 'Admin', password: 'AdminPidor'}
+    // state = {visible: false, name: '', password: ''}
 
     handleOpenLoginDialog = () => this.setState({visible: true})
 
@@ -28,13 +29,13 @@ export default class LoginDialog extends React.Component<IProps, IState> {
 
     handleLogin = async () => {
         const {name, password} = this.state
+        const {login} = this.props
         const res = await axios.post('http://localhost:8080/user/login', {name, password})
-        // console.log(`token: ${res.data}`)
-        console.log(res)
-        localStorage.setItem('token', res.data[0])
-        localStorage.setItem('id', res.data[1])
-        // this.handleCloseLoginDialog()
-        window.location.reload()
+        const [token, id] = res.data;
+        login(token, id);
+        // localStorage.setItem('token', res.data[0])
+        // localStorage.setItem('id', res.data[1])
+        this.setState({visible: false})
     }
 
     render() {

@@ -1,5 +1,13 @@
-import { combineReducers } from 'redux'
-import todos from './todos'
-import visibilityFilter from './visibilityFilter'
+import {combineReducers} from 'redux'
+import accountStore from './accountReducer'
 
-export default combineReducers({todos, visibilityFilter})
+export interface IAccountStore {
+    token?: string
+    id?: string
+}
+
+export interface IStore {
+    accountStore: IAccountStore
+}
+
+export default combineReducers({accountStore})
