@@ -13,7 +13,6 @@ interface IProps extends IInjectedProps {
 }
 
 interface IState {
-    // token: string
 }
 
 class App extends React.Component<IProps, IState> {

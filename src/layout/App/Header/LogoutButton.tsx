@@ -3,6 +3,7 @@ import React from "react";
 import historyServicse from "../../../services/historyService";
 
 interface IProps {
+    logout: () => void
 }
 
 interface IState {
@@ -11,8 +12,8 @@ interface IState {
 export default class LogoutButton extends React.Component<IProps, IState> {
     logout = () => {
         if (window.confirm('Are you sure you wish to logout?')) {
-            localStorage.removeItem('token');
-            historyServicse.history!.push('/');
+            this.props.logout()
+            historyServicse.history!.push('/')
         }
     }
 
@@ -20,4 +21,6 @@ export default class LogoutButton extends React.Component<IProps, IState> {
         return <Button onClick={this.logout}>Logout</Button>
     }
 }
+
+
 

@@ -8,7 +8,7 @@ import PrivateButton from "./PrivateButton";
 import historyServicse from "../../../services/historyService";
 import {connect} from "react-redux";
 import {Dispatch} from "redux";
-import {login} from "../../../store/actions";
+import {login, logout} from "../../../store/actions";
 import {IStore} from "../../../store/reducers";
 
 interface IState {
@@ -19,6 +19,7 @@ interface IProps {
     id?: string
     token?: string
     login?: (token: string, id: string) => void
+    logout?: () => void
 }
 
 
@@ -30,15 +31,16 @@ class _Header extends React.Component<IProps, IState> {
     }
 
 
-    componentWillReceiveProps(nextProps: Readonly<IProps>, nextContext: any): void {
+
+    static getDerivedStateFromProps(nextProps: Readonly<IProps>, prevState: IState) {
         const {token} = nextProps;
-        if(token !== this.props.token) this.setState({token})
+        return (token !== prevState.token) ? {...prevState, token} : null
     }
 
     handleClickToLogo = () => historyServicse.history!.push('/');
 
     render() {
-        const {login} = this.props;
+        const {login, logout} = this.props;
         return (
             <div className={styles.root}>
                 <div onClick={this.handleClickToLogo} className={styles.title}>WISHERY</div>
@@ -46,7 +48,7 @@ class _Header extends React.Component<IProps, IState> {
                     {this.state.token
                         ? <>
                             <PrivateButton/>
-                            <LogoutButton/>
+                            {logout && <LogoutButton logout={logout}/>}
                         </>
                         : <>
                             {login && <LoginDialog login={login}/>}
@@ -63,6 +65,7 @@ const mapStateToProps = ({accountStore: {id, token}}: IStore) => ({id, token})
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
     login: (token: string, id: string) => dispatch(login(token, id)),
+    logout: () => dispatch(logout()),
 })
 
 const Header = connect(mapStateToProps, mapDispatchToProps)(_Header)

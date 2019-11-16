@@ -16,8 +16,8 @@ interface IState {
 
 
 export default class LoginDialog extends React.Component<IProps, IState> {
-    state = {visible: true, name: 'Admin', password: 'AdminPidor'}
-    // state = {visible: false, name: '', password: ''}
+    // state = {visible: true, name: 'Admin', password: 'AdminPidor'}
+    state = {visible: false, name: '', password: ''}
 
     handleOpenLoginDialog = () => this.setState({visible: true})
 

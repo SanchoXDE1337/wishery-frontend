@@ -1,5 +1,6 @@
 export const actionTypes = {
-    LOGIN: 'LOGIN'
+    LOGIN: 'LOGIN',
+    LOGOUT: 'LOGOUT'
 }
 
 
@@ -17,5 +18,6 @@ export const login = (token: string, id: string): ILoginAction => ({
     token,
     id
 });
-
-export const test = (type: string) => ({type})
+export const logout = (): IAction => ({
+    type: actionTypes.LOGOUT,
+});
