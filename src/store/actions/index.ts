@@ -1,43 +1,21 @@
-let nextTodoId = 0;
+export const actionTypes = {
+    LOGIN: 'LOGIN'
+}
 
-export type TActionType = 'ADD_TODO' | 'SET_VISIBILITY_FILTER' | 'TOGGLE_TODO'
-
-export type TFilterType = 'SHOW_ALL' | 'SHOW_COMPLETED' | 'SHOW_ACTIVE'
 
 export interface IAction {
-    type: TActionType
+    type: string
 }
 
-export interface IAddTodoAction extends IAction{
-    id: number
-    text: string
-}
-export interface ISetVisibilityFiltern extends IAction{
-    filter: TFilterType
-}
-export interface IToggleTodo extends IAction{
-    id: number
+export interface ILoginAction extends IAction {
+    token: string
+    id: string
 }
 
-
-export const addTodo = (text: string): IAddTodoAction => ({
-    type: 'ADD_TODO',
-    id: nextTodoId++,
-    text
-});
-
-export const setVisibilityFilter = (filter: TFilterType): ISetVisibilityFiltern => ({
-    type: 'SET_VISIBILITY_FILTER',
-    filter
-});
-
-export const toggleTodo = (id: number): IToggleTodo => ({
-    type: 'TOGGLE_TODO',
+export const login = (token: string, id: string): ILoginAction => ({
+    type: actionTypes.LOGIN,
+    token,
     id
 });
 
-export const VisibilityFilters = {
-    SHOW_ALL: 'SHOW_ALL',
-    SHOW_COMPLETED: 'SHOW_COMPLETED',
-    SHOW_ACTIVE: 'SHOW_ACTIVE'
-};
+export const test = (type: string) => ({type})
