@@ -5,7 +5,7 @@ import LoginDialog from './LoginDialog'
 import RegisterDialog from "./RegisterDialog";
 import LogoutButton from './LogoutButton'
 import PrivateButton from "./PrivateButton";
-import historyServicse from "../../../services/historyService";
+import historyService from "../../../services/historyService";
 import {connect} from "react-redux";
 import {Dispatch} from "redux";
 import {login, logout} from "../../../store/actions";
@@ -37,7 +37,7 @@ class _Header extends React.Component<IProps, IState> {
         return (token !== prevState.token) ? {...prevState, token} : null
     }
 
-    handleClickToLogo = () => historyServicse.history!.push('/');
+    handleClickToLogo = () => historyService.history!.push('/');
 
     render() {
         const {login, logout} = this.props;

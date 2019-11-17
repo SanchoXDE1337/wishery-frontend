@@ -2,13 +2,14 @@ import React from 'react'
 import { Card } from 'semantic-ui-react'
 
 interface IProps {
+    url?: string
     title: string
     author: string
-    description:string
+    description?:string
 }
-const CardExampleLinkCard: React.FC<IProps> = ({title, author, description}) => (
+const CardExampleLinkCard: React.FC<IProps> = ({title, author, description, url}) => (
     <Card
-        // href='/'
+        href={url}
         header={title}
         meta={author}
         description={description}

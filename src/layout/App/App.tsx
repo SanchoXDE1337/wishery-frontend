@@ -3,7 +3,8 @@ import styles from './styles.scss'
 import Header from './Header'
 import {Switch, Route} from 'react-router-dom'
 import Private from './Private/Private'
-
+import Home from './Home/Home'
+import Post from './Post/Post'
 
 interface IInjectedProps {
     accountStore?: any
@@ -27,8 +28,13 @@ class App extends React.Component<IProps, IState> {
                             <Route path="/private">
                                 <Private/>
                             </Route>
-                            <Route path="/">
+                            <Route exact path="/">
+                                <Home/>
                             </Route>
+                           {/* <Route path="/posts/:id">
+                                <Post/>
+                            </Route>*/}
+                            <Route path="/posts/:id" component={Post}/>
                         </Switch>
                     </div>
                     <Footer/>

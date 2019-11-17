@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from "axios";
-import CardExampleLinkCard from "./Card";
+import CardExampleLinkCard from "../../../components/Card/Card";
 import historyServicse from "../../../services/historyService";
 import {IStore} from "../../../store/reducers";
 import {connect} from "react-redux";
