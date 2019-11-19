@@ -5,6 +5,8 @@ import {Switch, Route} from 'react-router-dom'
 import Private from './Private/Private'
 import Home from './Home/Home'
 import Post from './Post/Post'
+import Footer from "./Footer";
+import FourOFour from "./404";
 
 interface IInjectedProps {
     accountStore?: any
@@ -31,10 +33,8 @@ class App extends React.Component<IProps, IState> {
                             <Route exact path="/">
                                 <Home/>
                             </Route>
-                           {/* <Route path="/posts/:id">
-                                <Post/>
-                            </Route>*/}
                             <Route path="/posts/:id" component={Post}/>
+                            <Route path="*" component={FourOFour}/>
                         </Switch>
                     </div>
                     <Footer/>
@@ -46,5 +46,3 @@ class App extends React.Component<IProps, IState> {
 
 
 export default App
-
-const Footer: React.FC = () => <div className={styles.footer}>© wishery</div>;

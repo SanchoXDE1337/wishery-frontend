@@ -1,4 +1,3 @@
-
 export const loadState = (): any | undefined => {
     try {
         const state = JSON.parse(localStorage.getItem('store') as string);

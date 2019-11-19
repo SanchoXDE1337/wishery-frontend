@@ -12,6 +12,7 @@ type TDataItem = {
     author: string
     description?: string
     title: string
+    date: string
 }
 type TCommentItem = {
     _id?: string
@@ -31,29 +32,30 @@ class Post extends React.Component<IProps, IState> {
             _id: '',
             author: '',
             description: '',
-            title: ''
+            title: '',
+            date: ''
         },
         comments: []
     }
 
     async componentDidMount() {
-        const rawData = await axios(`http://localhost:8080/posts/${this.props.match.params.id}`)
-        const data = rawData.data
+        const data = (await axios(`http://localhost:8080/posts/${this.props.match.params.id}`)).data
         this.setState({data: data})
-        console.log(this.state.data)
     }
 
     render() {
-        const {author, description, title} = this.state.data
+        const {author, description, title, date} = this.state.data
         return (
             <>
-                <h1>Post {this.props.match.params.id}</h1>
+                <h4>Post</h4>
+                <h5>{this.state.data._id}</h5>
                 <CardExampleLinkCard
                     author={author}
                     description={description}
                     title={title}
+                    date={date}
                 />
-                <Comments/>
+                <Comments postId={this.props.match.params.id}/>
             </>
         )
     }

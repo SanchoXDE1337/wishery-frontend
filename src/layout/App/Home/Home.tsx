@@ -10,6 +10,7 @@ type TDataItem = {
     author: string
     description?: string
     title: string
+    date?: string
 }
 
 interface IState {
@@ -26,7 +27,6 @@ class Home extends React.Component<IProps, IState> {
         const rawData = await axios(`http://localhost:8080/`)
         const data = rawData.data
         this.setState({data})
-        console.log(this.state)
     }
 
     render() {
@@ -36,7 +36,7 @@ class Home extends React.Component<IProps, IState> {
                     <CardExampleLinkCard
                         author={obj.author}
                         url={`/posts/${obj._id}`}
-                        // description={obj.description}
+                        // date={obj.date}
                         title={obj.title}
                         key={obj.author + obj.description + obj.title}
                     />
