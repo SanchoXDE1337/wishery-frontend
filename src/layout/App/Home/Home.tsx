@@ -24,8 +24,8 @@ class Home extends React.Component<IProps, IState> {
     }
 
     async componentDidMount() {
-        const rawData = await axios(`http://localhost:8080/`)
-        const data = rawData.data
+        const data = (await axios(`http://localhost:8080/`)).data
+        data.reverse()
         this.setState({data})
     }
 

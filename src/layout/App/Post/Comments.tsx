@@ -2,8 +2,9 @@ import React from 'react'
 import {Button, Comment, Form, Header} from 'semantic-ui-react'
 import axios from 'axios'
 import Commentary from './Comment'
-import {IStore} from "../../../store/reducers";
-import {connect} from "react-redux";
+import {IStore} from "../../../store/reducers"
+import {connect} from "react-redux"
+import styles from '../styles.scss'
 
 type TDataItem = {
     author: string
@@ -22,6 +23,7 @@ interface IState {
     data: TDataItem[] | null
     textareaValue: string
     isAuth: boolean
+    token?: string
 }
 
 
@@ -30,6 +32,12 @@ class _Comments extends React.Component<IProps, IState> {
         textareaValue: '',
         data: [],
         isAuth: false
+    }
+
+    static getDerivedStateFromProps(nextProps: Readonly<IProps>, prevState: IState) {
+        const {token} = nextProps
+        if (!token) return {...prevState, isAuth: false}
+        return (token !== prevState.token) ? {...prevState, token, isAuth: true} : null
     }
 
     async componentDidMount() {
@@ -42,7 +50,7 @@ class _Comments extends React.Component<IProps, IState> {
         if (isAuth) return this.setState({isAuth})
     }
 
-    handleButtonClick = async () => {
+    handleSubmit = async () => {
         const {textareaValue} = this.state
         const {token} = this.props
         const res: TDataItem = (await axios.post(`http://localhost:8080/comments/${this.props.postId}`, {
@@ -58,7 +66,7 @@ class _Comments extends React.Component<IProps, IState> {
 
     render() {
         return (
-            <Comment.Group>
+            <Comment.Group className={styles.comments}>
                 <Header as='h3' dividing>
                     Comments
                 </Header>
@@ -77,7 +85,7 @@ class _Comments extends React.Component<IProps, IState> {
                                        placeholder={'Type your reply here'}
                         />
                         <Button content='Add Reply' labelPosition='left' icon='edit' primary
-                                onClick={this.handleButtonClick}
+                                onClick={this.handleSubmit}
                         />
                     </Form>
                 }

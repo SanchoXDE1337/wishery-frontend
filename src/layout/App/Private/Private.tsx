@@ -15,6 +15,7 @@ type TDataItem = {
     author: string
     description: string
     title: string
+    _id:string
     date?:string
 }
 
@@ -35,7 +36,8 @@ class _Private extends React.Component<IProps, IState> {
         axios(`http://localhost:8080/private/${id}`, {headers: {'auth-token': token}})
             .then(res => {
                 historyService.history!.push('/private')
-                this.setState({data: res.data || []})
+                this.setState({data: res.data.reverse() || []})
+                console.log(this.state)
             })
             .catch(e => {
                 this.setState({data: null})
@@ -48,14 +50,15 @@ class _Private extends React.Component<IProps, IState> {
         if (this.state.data == null) return <h1>403 forbidden</h1>
         return (
             <>
-                <h1>Hello world</h1>
+                <h2>Here you can Update & Delete your Wishes</h2>
                 {this.state.data.map((obj: TDataItem) =>
                     <CardExampleLinkCard
                         // date={obj.date}
+                        url={`/posts/update/${obj._id}`}
                         author={obj.author}
                         description={obj.description}
                         title={obj.title}
-                        key={obj.author + obj.description}
+                        key={obj._id}
                     />
                 )}
             </>

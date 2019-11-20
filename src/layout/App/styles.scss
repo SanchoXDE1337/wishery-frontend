@@ -3,12 +3,13 @@
   width: 100%;
   height: calc(100vh - 60px);
   padding-bottom: 60px;
+
   a {
     text-decoration: none;
     color: #fff3fb;
   }
 
-  .body{
+  .body {
     display: flex;
     height: calc(100vh - 60px);
     flex-direction: column;
@@ -16,7 +17,15 @@
   }
 
   .content {
-    padding: 1em;
+    padding: 1em 8em;
+
+    .comments {
+      margin: 1em auto;
+    }
+
+    .addButton {
+      margin: 0 auto;
+    }
   }
 
   .footer {
@@ -25,6 +34,14 @@
     align-items: center;
     justify-content: center;
     margin-bottom: 20px;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .root {
+    .content {
+      padding: 2em;
+    }
   }
 }
 
