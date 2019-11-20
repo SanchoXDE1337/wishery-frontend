@@ -10,9 +10,12 @@ import {connect} from "react-redux";
 import {Dispatch} from "redux";
 import {login, logout} from "../../../store/actions";
 import {IStore} from "../../../store/reducers";
+import {Dropdown} from 'semantic-ui-react'
+import axios from "axios";
 
 interface IState {
     token?: string
+    isAuth: boolean
 }
 
 interface IProps {
@@ -24,17 +27,36 @@ interface IProps {
 
 
 class _Header extends React.Component<IProps, IState> {
-
     constructor(props: IProps) {
         super(props);
-        this.state = {token: props.token}
+        this.state = {token: props.token, isAuth: false}
+    }
+
+      static getDerivedStateFromProps(nextProps: Readonly<IProps>, prevState: IState) {
+          const {token} = nextProps
+          if(!token) return {...prevState, isAuth: false}
+          return (token !== prevState.token) ? {...prevState, token} : null
+      }
+
+    authenticate = async () => {
+        const {token} = this.props
+        const isAuth = (await axios(`http://localhost:8080/user/isAuth`, {headers: {'auth-token': token}})).data
+        if (isAuth !== this.state.isAuth) {
+            if (isAuth) {
+                this.setState({isAuth})
+            } else {
+                this.setState({isAuth: false})
+            }
+        }
+    }
+
+    async componentDidMount() {
+        await this.authenticate()
     }
 
 
-
-    static getDerivedStateFromProps(nextProps: Readonly<IProps>, prevState: IState) {
-        const {token} = nextProps;
-        return (token !== prevState.token) ? {...prevState, token} : null
+    async componentDidUpdate(prevProps: Readonly<IProps>, prevState: IState) {
+        await this.authenticate()
     }
 
     handleClickToLogo = () => historyService.history!.push('/');
@@ -45,7 +67,30 @@ class _Header extends React.Component<IProps, IState> {
             <div className={styles.root}>
                 <div onClick={this.handleClickToLogo} className={styles.title}>WISHERY</div>
                 <div className={styles.buttonSet}>
-                    {this.state.token
+                    <Dropdown text='Account'>
+                        <Dropdown.Menu direction={'left'}>
+                            {this.state.isAuth
+                                ? <>
+                                    <Dropdown.Item>
+                                        <PrivateButton/>
+                                    </Dropdown.Item>
+                                    <Dropdown.Item>
+                                        {logout && <LogoutButton logout={logout}/>}
+                                    </Dropdown.Item>
+                                </>
+                                : <>
+                                    <Dropdown.Item>
+                                        {login && <LoginDialog login={login}/>}
+                                    </Dropdown.Item>
+                                    <Dropdown.Item>
+                                        <RegisterDialog/>
+                                    </Dropdown.Item>
+                                </>}
+                        </Dropdown.Menu>
+                    </Dropdown>
+                </div>
+               {/* <div className={styles.buttonSet}>
+                    {this.state.isAuth
                         ? <>
                             <PrivateButton/>
                             {logout && <LogoutButton logout={logout}/>}
@@ -55,7 +100,7 @@ class _Header extends React.Component<IProps, IState> {
                             <RegisterDialog/>
                         </>
                     }
-                </div>
+                </div>*/}
             </div>
         )
     }
