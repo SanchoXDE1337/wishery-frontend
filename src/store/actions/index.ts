@@ -1,7 +1,6 @@
 export const actionTypes = {
     LOGIN: 'LOGIN',
-    LOGOUT: 'LOGOUT',
-    AUTH: 'AUTH'
+    LOGOUT: 'LOGOUT'
 }
 
 
