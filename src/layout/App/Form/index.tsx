@@ -4,6 +4,7 @@ import {Button, Form as UIForm} from 'semantic-ui-react'
 import styles from './styles.scss';
 import axios from "axios";
 import historyService from "../../../services/historyService";
+import {DatePick} from "../../../components/DatePicker";
 
 interface IProps {
     match?: any
@@ -11,6 +12,7 @@ interface IProps {
     title?: string
     author?: string
     description?: string
+    date?: any
 }
 
 
@@ -58,7 +60,7 @@ class WishForm extends React.Component<IProps, IState> {
         try {
             await axios.put(`http://localhost:8080/posts/${this.props.match.params.id}`, {author, title, description})
             alert('Updated successfully!')
-            historyService.history!.push('/')
+            historyService.history!.push('/private')
         } catch (e) {
             alert('Something goes wrong! Try again!')
             console.log(e)
@@ -66,14 +68,15 @@ class WishForm extends React.Component<IProps, IState> {
     }
 
     onSubmit = async (values: IProps) => {
-        const {author, title, description} = values
-        try {
+        // const {author, title, description} = values
+        console.log(values)
+       /* try {
             await axios.post(`http://localhost:8080/posts/`, {author, title, description})
             historyService.history!.push('/')
         } catch (e) {
             alert('Something goes wrong! Try again!')
             console.log(e)
-        }
+        }*/
     }
 
     render() {
@@ -84,7 +87,7 @@ class WishForm extends React.Component<IProps, IState> {
                 <div className={styles.root}>
                     <Form
                         onSubmit={updating ? this.onUpdate : this.onSubmit}
-                        initialValues={{author, title, description}}
+                        initialValues={{author, title, description, date: ''}}
                         validate={(values: IProps) => {
                             const errors: IProps = {}
                             if (!values.title) {
@@ -119,6 +122,21 @@ class WishForm extends React.Component<IProps, IState> {
                                         </div>
                                     )}
                                 </Field>
+                                <Field name="date">
+                                    {({ input, meta }) => (
+                                        <>
+                                            <DatePick
+                                                type="text"
+                                                {...input}
+                                            />
+                                            {meta.error && meta.touched &&
+                                            <span className={styles.error}>{meta.error}</span>}
+                                        </>
+                                    )}
+                                </Field>
+                              {/*  <Field name="date">
+                                    {() => <DatePick/>}
+                                </Field>*/}
                                 <div className="buttons">
                                     <Button type='submit' disabled={submitting || pristine}>Submit</Button>
                                 </div>

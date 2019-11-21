@@ -24,23 +24,21 @@
   }
 }
 
-.dialogBody {
-
-  display: flex;
-  flex-direction: column;
-
-  .input{
-    width: 70%;
-  }
-
-  & > * {
-    margin: 0 0 10px 0;
-  }
-
+.error {
+  color: crimson;
 }
 
+.registration {
+  font-size: 1.2em;
+  font-weight: 600;
+
+  .errorField {
+    box-shadow: 0 0 10px rgba(#DC143C, 0.8) !important;
+  }
+}
 
 .row{
+  margin-top: 1em;
   display: flex;
   justify-content: space-between;
   width: 100%;

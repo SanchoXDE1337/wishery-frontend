@@ -1,9 +1,10 @@
 import React from 'react';
 import axios from "axios";
-import CardExampleLinkCard from "../../../components/Card/Card";
+import Card from "../../../components/Card/Card";
 import historyService from "../../../services/historyService";
 import {IStore} from "../../../store/reducers";
 import {connect} from "react-redux";
+import styles from './styles.scss'
 
 
 interface IProps {
@@ -15,19 +16,23 @@ type TDataItem = {
     author: string
     description: string
     title: string
-    _id:string
-    date?:string
+    _id: string
+    date?: string
 }
 
 interface IState {
     data: TDataItem[] | null
+    // isAuth: boolean
 }
 
 
 class _Private extends React.Component<IProps, IState> {
     state = {
-        data: []
+        data: [],
+        // isAuth:false
     }
+
+
 
     componentDidMount() {
         const {id, token} = this.props
@@ -37,13 +42,17 @@ class _Private extends React.Component<IProps, IState> {
             .then(res => {
                 historyService.history!.push('/private')
                 this.setState({data: res.data.reverse() || []})
-                console.log(this.state)
             })
             .catch(e => {
                 this.setState({data: null})
             })
+    }
 
-
+    handleDelete = async (id: string) => {
+        const result = this.state.data.filter((obj: TDataItem) => obj._id !== id)
+        this.setState({data: result})
+        await axios.delete(`http://localhost:8080/posts/${id}`)
+        console.log('Deleted')
     }
 
     render() {
@@ -52,14 +61,19 @@ class _Private extends React.Component<IProps, IState> {
             <>
                 <h2>Here you can Update & Delete your Wishes</h2>
                 {this.state.data.map((obj: TDataItem) =>
-                    <CardExampleLinkCard
-                        // date={obj.date}
-                        url={`/posts/update/${obj._id}`}
-                        author={obj.author}
-                        description={obj.description}
-                        title={obj.title}
-                        key={obj._id}
-                    />
+                    <div className={styles.container} key={obj._id}>
+                        <Card
+                            // date={obj.date}
+                            style={{marginBottom: 0}}
+                            url={`/posts/update/${obj._id}`}
+                            author={obj.author}
+                            description={obj.description}
+                            title={obj.title}
+                        />
+                        <div className={styles.button}>
+                            <button className={styles.delButton} onClick={() => this.handleDelete(obj._id)}>del</button>
+                        </div>
+                    </div>
                 )}
             </>
         )

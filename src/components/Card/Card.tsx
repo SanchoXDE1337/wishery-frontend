@@ -2,6 +2,7 @@ import React from 'react'
 import {Card} from 'semantic-ui-react'
 
 interface IProps {
+    style?: object
     url?: string
     title: string
     author: string
@@ -9,9 +10,10 @@ interface IProps {
     date?: string
 }
 
-const CardExampleLinkCard: React.FC<IProps> = ({title, author, description, url}) => {
+const CardExampleLinkCard: React.FC<IProps> = ({title, author, description, url, style}) => {
     return (
         <Card
+            style={style}
             href={url}
             header={title}
             meta={`${author}`}
