@@ -12,7 +12,7 @@ interface IProps {
     title?: string
     author?: string
     description?: string
-    date?: any
+    theme?: string
 }
 
 
@@ -34,6 +34,7 @@ class WishForm extends React.Component<IProps, IState> {
         data: {
             description: '',
             title: '',
+            theme: ''
         }
     }
 
@@ -47,7 +48,7 @@ class WishForm extends React.Component<IProps, IState> {
         const {token} = this.props
         const isAuth = (await axios(`http://localhost:8080/user/isAuth`, {headers: {'auth-token': token}})).data
         if (isAuth) this.setState({isAuth})
-        if (this.props.match.params.id) this.setState({updating: true})
+        if (this.props.match.params.id) this.setState({updating: true}) //Если обратились по id => редактируем
         if (this.state.updating) {
             const data = (await axios(`http://localhost:8080/posts/${this.props.match.params.id}`)).data
             this.setState({data: data})
@@ -56,9 +57,9 @@ class WishForm extends React.Component<IProps, IState> {
     }
 
     onUpdate = async (values: IProps) => {
-        const {author, title, description} = values
+        const {author, title, description, theme} = values
         try {
-            await axios.put(`http://localhost:8080/posts/${this.props.match.params.id}`, {author, title, description})
+            await axios.put(`http://localhost:8080/posts/${this.props.match.params.id}`, {author, title, description, theme})
             alert('Updated successfully!')
             historyService.history!.push('/private')
         } catch (e) {
@@ -68,26 +69,26 @@ class WishForm extends React.Component<IProps, IState> {
     }
 
     onSubmit = async (values: IProps) => {
-        // const {author, title, description} = values
+        const {author, title, description, theme} = values
         console.log(values)
-       /* try {
-            await axios.post(`http://localhost:8080/posts/`, {author, title, description})
-            historyService.history!.push('/')
-        } catch (e) {
-            alert('Something goes wrong! Try again!')
-            console.log(e)
-        }*/
+         try {
+             await axios.post(`http://localhost:8080/posts/`, {author, title, description, theme})
+             historyService.history!.push('/')
+         } catch (e) {
+             alert('Something goes wrong! Try again!')
+             console.log(e)
+         }
     }
 
     render() {
         const {author} = this.props
-        const {data: {title, description}, updating, isAuth} = this.state
+        const {data: {title, description, theme}, updating, isAuth} = this.state
         if (isAuth) {
             return (
                 <div className={styles.root}>
                     <Form
                         onSubmit={updating ? this.onUpdate : this.onSubmit}
-                        initialValues={{author, title, description, date: ''}}
+                        initialValues={{author, title, description, theme}}
                         validate={(values: IProps) => {
                             const errors: IProps = {}
                             if (!values.title) {
@@ -95,6 +96,9 @@ class WishForm extends React.Component<IProps, IState> {
                             }
                             if (!values.description) {
                                 errors.description = 'Required'
+                            }
+                            if (!values.theme) {
+                                errors.theme = 'Required'
                             }
                             return errors
                         }}
@@ -122,7 +126,31 @@ class WishForm extends React.Component<IProps, IState> {
                                         </div>
                                     )}
                                 </Field>
-                                <Field name="date">
+                                <Field name="theme">
+                                    {({input, meta}) => (
+                                        <div>
+                                            <label>Theme of your wish</label>
+                                            <select {...input} placeholder={'Choose theme of your wish'}
+                                                    className={meta.error && meta.touched ? styles.errorField : ''}>
+                                                <option />
+                                                <option value="Drink">Drink</option>
+                                                <option value="Walk">Walk</option>
+                                                <option value="Cinema">Cinema</option>
+                                                <option value="Concert">Concert</option>
+                                                <option value="Outdoors">Outdoors</option>
+                                                <option value="Chill">Chill</option>
+                                                <option value="Travel">Travel</option>
+                                                <option value="Game">Game</option>
+                                                <option value="Other">Other</option>
+                                            </select>
+                                            {meta.error && meta.touched &&
+                                            <span className={styles.error}>{meta.error}</span>
+                                            }
+                                        </div>
+                                    )}
+                                </Field>
+
+                                {/* <Field name="date">
                                     {({ input, meta }) => (
                                         <>
                                             <DatePick
@@ -133,11 +161,11 @@ class WishForm extends React.Component<IProps, IState> {
                                             <span className={styles.error}>{meta.error}</span>}
                                         </>
                                     )}
-                                </Field>
-                              {/*  <Field name="date">
+                                </Field>*/}
+                                {/*  <Field name="date">
                                     {() => <DatePick/>}
                                 </Field>*/}
-                                <div className="buttons">
+                                <div className={styles.button}>
                                     <Button type='submit' disabled={submitting || pristine}>Submit</Button>
                                 </div>
                             </UIForm>

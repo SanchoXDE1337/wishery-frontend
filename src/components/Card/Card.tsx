@@ -6,21 +6,22 @@ interface IProps {
     url?: string
     title: string
     author: string
+    theme: string
     description?: string
     date?: string
 }
 
-const CardExampleLinkCard: React.FC<IProps> = ({title, author, description, url, style}) => {
+const SimpleCard: React.FC<IProps> = ({title, author, description, url, style, theme}) => {
     return (
         <Card
             style={style}
             href={url}
             header={title}
-            meta={`${author}`}
+            meta={`${author}, theme: ${theme}`}
             description={description}
             fluid
         />
     )
 }
 
-export default CardExampleLinkCard
+export default SimpleCard

@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from "axios";
-import CardExampleLinkCard from "../../../components/Card/Card";
+import Card from "../../../components/Card/Card";
 
 interface IProps {
 }
@@ -10,6 +10,7 @@ type TDataItem = {
     author: string
     description?: string
     title: string
+    theme: string
     date?: string
 }
 
@@ -33,10 +34,11 @@ class Home extends React.Component<IProps, IState> {
         return (
             <>
                 {this.state.data.map((obj: TDataItem) =>
-                    <CardExampleLinkCard
+                    <Card
                         author={obj.author}
                         url={`/posts/${obj._id}`}
                         // date={obj.date}
+                        theme={obj.theme}
                         title={obj.title}
                         key={obj.author + obj.description + obj.title}
                     />

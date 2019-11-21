@@ -60,7 +60,7 @@ class _App extends React.Component<IProps, IState> {
                                     ? <div className={styles.addButton}>
                                         <Button
                                             onClick={() => historyService.history!.push('/posts/add')}
-                                        >Add new Wish!</Button>
+                                        ><span className={styles.plus}>+</span>Add new Wish!</Button>
                                     </div>
                                     : null
                                 }

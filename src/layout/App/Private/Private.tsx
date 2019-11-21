@@ -17,6 +17,7 @@ type TDataItem = {
     description: string
     title: string
     _id: string
+    theme: string
     date?: string
 }
 
@@ -33,7 +34,6 @@ class _Private extends React.Component<IProps, IState> {
     }
 
 
-
     componentDidMount() {
         const {id, token} = this.props
         if (!id || !token) return this.setState({data: null})
@@ -48,11 +48,17 @@ class _Private extends React.Component<IProps, IState> {
             })
     }
 
+    handleUpdate = (id: string) => {
+        historyService.history!.push(`/posts/update/${id}`)
+    }
+
     handleDelete = async (id: string) => {
-        const result = this.state.data.filter((obj: TDataItem) => obj._id !== id)
-        this.setState({data: result})
-        await axios.delete(`http://localhost:8080/posts/${id}`)
-        console.log('Deleted')
+        let confirmation = window.confirm('Are you sure want to delete this wish?')
+        if (confirmation) {
+            const result = this.state.data.filter((obj: TDataItem) => obj._id !== id)
+            this.setState({data: result})
+            await axios.delete(`http://localhost:8080/posts/${id}`)
+        }
     }
 
     render() {
@@ -63,15 +69,23 @@ class _Private extends React.Component<IProps, IState> {
                 {this.state.data.map((obj: TDataItem) =>
                     <div className={styles.container} key={obj._id}>
                         <Card
-                            // date={obj.date}
                             style={{marginBottom: 0}}
-                            url={`/posts/update/${obj._id}`}
+                            theme={obj.theme}
+                            url={`/posts/${obj._id}`}
                             author={obj.author}
-                            description={obj.description}
                             title={obj.title}
                         />
                         <div className={styles.button}>
-                            <button className={styles.delButton} onClick={() => this.handleDelete(obj._id)}>del</button>
+                            <button className={styles.delButton} onClick={() => this.handleUpdate(obj._id)}
+                                    title={'Update!'}>
+                                <i className="material-icons">update</i>
+                            </button>
+                        </div>
+                        <div className={styles.button}>
+                            <button className={styles.delButton} onClick={() => this.handleDelete(obj._id)}
+                                    title={'Delete!'}>
+                                <i className="material-icons-outlined">delete_forever</i>
+                            </button>
                         </div>
                     </div>
                 )}

@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from "axios";
-import CardExampleLinkCard from "../../../components/Card/Card";
+import Card from "../../../components/Card/Card";
 import Comments from './Comments';
 
 interface IProps {
@@ -13,6 +13,7 @@ type TDataItem = {
     description?: string
     title: string
     date: string
+    theme: string
 }
 type TCommentItem = {
     _id?: string
@@ -33,6 +34,7 @@ class Post extends React.Component<IProps, IState> {
             author: '',
             description: '',
             title: '',
+            theme: '',
             date: ''
         },
         comments: []
@@ -44,16 +46,14 @@ class Post extends React.Component<IProps, IState> {
     }
 
     render() {
-        const {author, description, title, date} = this.state.data
+        const {author, description, title, theme} = this.state.data
         return (
             <>
-                <h4>Post</h4>
-                <h5>{this.state.data._id}</h5>
-                <CardExampleLinkCard
+                <Card
                     author={author}
                     description={description}
                     title={title}
-                    date={date}
+                    theme={theme}
                 />
                 <Comments postId={this.props.match.params.id}/>
             </>

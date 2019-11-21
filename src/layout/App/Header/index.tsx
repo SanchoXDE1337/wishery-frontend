@@ -89,18 +89,6 @@ class _Header extends React.Component<IProps, IState> {
                         </Dropdown.Menu>
                     </Dropdown>
                 </div>
-               {/* <div className={styles.buttonSet}>
-                    {this.state.isAuth
-                        ? <>
-                            <PrivateButton/>
-                            {logout && <LogoutButton logout={logout}/>}
-                        </>
-                        : <>
-                            {login && <LoginDialog login={login}/>}
-                            <RegisterDialog/>
-                        </>
-                    }
-                </div>*/}
             </div>
         )
     }
