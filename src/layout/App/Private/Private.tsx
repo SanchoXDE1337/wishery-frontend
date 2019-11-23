@@ -5,6 +5,7 @@ import historyService from "../../../services/historyService";
 import {IStore} from "../../../store/reducers";
 import {connect} from "react-redux";
 import styles from './styles.scss'
+import Button from "../../../components/Button";
 
 
 interface IProps {
@@ -22,30 +23,54 @@ type TDataItem = {
 }
 
 interface IState {
-    data: TDataItem[] | null
-    // isAuth: boolean
+    data: TDataItem[]
+    isAuth: boolean
+    isDataEmpty: boolean
 }
 
 
 class _Private extends React.Component<IProps, IState> {
     state = {
         data: [],
-        // isAuth:false
+        isAuth: false,
+        isDataEmpty: false
     }
 
+    static getDerivedStateFromProps(nextProps: Readonly<IProps>, prevState: IState) {
+        const {token} = nextProps;
+        if (!token) return {...prevState, isAuth: false}
+        return {...prevState, isAuth: true}
+    }
 
     componentDidMount() {
         const {id, token} = this.props
-        if (!id || !token) return this.setState({data: null})
-
         axios(`http://localhost:8080/private/${id}`, {headers: {'auth-token': token}})
             .then(res => {
-                historyService.history!.push('/private')
-                this.setState({data: res.data.reverse() || []})
+                this.setState({isAuth: true})
             })
             .catch(e => {
-                this.setState({data: null})
+                this.setState({isAuth: false})
             })
+    }
+
+    async componentDidUpdate(prevProps: Readonly<IProps>, prevState: IState) {
+        const {id, token} = this.props
+        const {data, isDataEmpty} = this.state
+        if (isDataEmpty) return null
+        if (data.length === 0) {
+            try {
+                const dataFromBD = (await axios(`http://localhost:8080/private/${id}`, {headers: {'auth-token': token}})).data
+                if (dataFromBD.length !== 0) {
+                    this.setState({data: dataFromBD})
+                } else {
+                    this.setState({isDataEmpty: true})
+                }
+            } catch (e) {
+                if ((e.response.status === 400 || 401) && this.state.isAuth) {
+                    this.setState({isAuth: false})
+                }
+            }
+        }
     }
 
     handleUpdate = (id: string) => {
@@ -62,10 +87,22 @@ class _Private extends React.Component<IProps, IState> {
     }
 
     render() {
-        if (this.state.data == null) return <h1>403 forbidden</h1>
+        if (!this.state.isAuth) return <h1>403 forbidden</h1>
         return (
             <>
-                <h2>Here you can Update & Delete your Wishes</h2>
+                {this.state.isDataEmpty
+                    ? <div>
+                        <h2>You have not any wishes :(</h2>
+                        <div className={styles.addButton}>
+                            <Button onClick={() => historyService.history!.push('/posts/add')}>
+                                <span className={styles.plus}>+</span>Add new Wish!
+                            </Button>
+                        </div>
+                    </div>
+                    : this.state.data.length > 0
+                        ? <h2>Here you can Update & Delete your Wishes</h2>
+                        : null
+                }
                 {this.state.data.map((obj: TDataItem) =>
                     <div className={styles.container} key={obj._id}>
                         <Card

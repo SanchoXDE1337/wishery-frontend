@@ -7,6 +7,16 @@
   height: auto;
   position: relative;
 
+  .plus {
+    font-weight: 800;
+    font-size: 1.5em;
+    margin-right: 0.3em;
+  }
+
+  .addButton {
+    margin: 0 auto 1em;
+  }
+
   .button {
     display: flex;
     align-self: stretch;

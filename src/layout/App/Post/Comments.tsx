@@ -28,7 +28,7 @@ interface IState {
     data: TDataItem[] | null
     textareaValue: string
     isAuth: boolean
-    token?: string
+    // token?: string
 }
 
 
@@ -42,7 +42,7 @@ class _Comments extends React.Component<IProps, IState> {
     static getDerivedStateFromProps(nextProps: Readonly<IProps>, prevState: IState) {
         const {token} = nextProps
         if (!token) return {...prevState, isAuth: false}
-        return (token !== prevState.token) ? {...prevState, token, isAuth: true} : null
+        return {...prevState, isAuth: true}
     }
 
     async componentDidMount() {

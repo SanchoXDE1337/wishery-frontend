@@ -70,9 +70,10 @@ class WishForm extends React.Component<IProps, IState> {
 
     onSubmit = async (values: IProps) => {
         const {author, title, description, theme} = values
+        const {token} = this.props
         console.log(values)
          try {
-             await axios.post(`http://localhost:8080/posts/`, {author, title, description, theme})
+             await axios.post(`http://localhost:8080/posts/`, {author, title, description, theme}, {headers: {'auth-token': token}})
              historyService.history!.push('/')
          } catch (e) {
              alert('Something goes wrong! Try again!')
@@ -128,7 +129,7 @@ class WishForm extends React.Component<IProps, IState> {
                                 </Field>
                                 <Field name="theme">
                                     {({input, meta}) => (
-                                        <div>
+                                        <div className={styles.select}>
                                             <label>Theme of your wish</label>
                                             <select {...input} placeholder={'Choose theme of your wish'}
                                                     className={meta.error && meta.touched ? styles.errorField : ''}>
